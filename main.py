@@ -27,11 +27,11 @@ font40 = pygame.font.SysFont('Constantia', 40)
 
 
 #load sounds
-explosion_fx = pygame.mixer.Sound("img/explosion.wav")
-explosion_fx.set_volume(0.25)
+explosionsound = pygame.mixer.Sound("img/explosion.wav")
+explosionsound.set_volume(0.25)
 
-explosion2_fx = pygame.mixer.Sound("img/explosion2.wav")
-explosion2_fx.set_volume(0.25)
+explosionsound2fx = pygame.mixer.Sound("img/explosion2.wav")
+explosionsound2fx.set_volume(0.25)
 
 laser_fx = pygame.mixer.Sound("img/laser.wav")
 laser_fx.set_volume(0.25)
@@ -133,7 +133,7 @@ class Bullets(pygame.sprite.Sprite):
             self.kill()
         if pygame.sprite.spritecollide(self, alien_group, True):
             self.kill()
-            explosion_fx.play()
+            explosionsound.play()
             explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
             explosion_group.add(explosion)
 
@@ -151,7 +151,7 @@ class Shield(pygame.sprite.Sprite):
     def update(self):
         if pygame.sprite.spritecollide(self, alien_bullet_group, True):
             self.health -= 1
-            explosion_fx.play()
+            explosionsound.play()
             explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
             explosion_group.add(explosion)
             # change the shield color to signify that it has been hit
@@ -193,7 +193,7 @@ class Alien_Bullets(pygame.sprite.Sprite):
             self.kill()
         if pygame.sprite.spritecollide(self, spaceship_group, False, pygame.sprite.collide_mask):
             self.kill()
-            explosion2_fx.play()
+            explosionsound2fx.play()
             # reduce spaceship health
             spaceship.health_remaining -= 1
             explosion = Explosion(self.rect.centerx, self.rect.centery, 1)
@@ -277,14 +277,14 @@ while run:
         # record current time
         time_now = pygame.time.get_ticks()
         # shoot
-        if time_now - last_alien_shot > alien_cooldown and len(alien_bullet_group) < 5 and len(alien_group) > 0:
-            attacking_alien = random.choice(alien_group.sprites())
+        if time_now - last_alien_shot > alien_cooldown and len(alien_bullet_group) < 5 and len(aliengroup) > 0:
+            attacking_alien = random.choice(aliengroup.sprites())
             alien_bullet = Alien_Bullets(attacking_alien.rect.centerx, attacking_alien.rect.bottom)
             alien_bullet_group.add(alien_bullet)
             last_alien_shot = time_now
 
         # check if all the aliens have been killed
-        if len(alien_group) == 0:
+        if len(aliengroup) == 0:
             game_over = 1
 
         if game_over == 0:
@@ -293,7 +293,7 @@ while run:
 
             # update sprite groups
             bullet_group.update()
-            alien_group.update()
+            aliengroup.update()
             alien_bullet_group.update()
         else:
             if game_over == -1:
@@ -317,7 +317,7 @@ while run:
     # draw sprite groups
     spaceship_group.draw(screen)
     bullet_group.draw(screen)
-    alien_group.draw(screen)
+    aliengroup.draw(screen)
     alien_bullet_group.draw(screen)
     shield_group.draw(screen)
     explosion_group.draw(screen)
